@@ -10,29 +10,23 @@ def main():
 
 
 def find_rating(lines, most_common=True):
-    line_set = set(lines)
+    remaining_lines = list(lines)
     for i in range(len(lines[0])):
-        filter_out(line_set, i, most_common)
-        if len(line_set) == 1:
-            return bitstr_to_int(list(line_set)[0])
+        crit = find_common(remaining_lines, i, most_common)
+        remaining_lines = list(filter(lambda n: n[i] != crit, remaining_lines))
+        if len(remaining_lines) == 1:
+            return bitstr_to_int(remaining_lines[0])
     print("No number found. That's weird.")
 
 
-def filter_out(numbers, index, most_common):
-    crit = find_common(numbers, index, most_common)
-    for n in numbers.copy():
-        if n[index] != crit:
-            numbers.remove(n)
-
-
 def find_common(numbers, index, most_common):
-    count = 0
+    ones_count = 0
     for n in numbers:
         if n[index] == "1":
-            count += 1
-    if count >= len(numbers)/2:
+            ones_count += 1
+    if ones_count >= len(numbers)/2:
         return "1" if most_common else "0"
-    if count < len(numbers)/2:
+    else:
         return "0" if most_common else "1"
 
 
