@@ -10,15 +10,13 @@ def main():
     for x in range(lenX):
         for y in range(lenY):
             grid[(x,y)] = h[x][y]
-    lp = get_low_points(grid, lenX, lenY)
-    print(sum([grid[p] for p in lp]) + len(lp))
 
-    basin_sizes = []
-    for p in lp:
-        basin = flood(grid, p)
-        basin_sizes.append(len(basin))
-    basin_sizes.sort()
-    print(reduce(lambda x, y: x * y, basin_sizes[-3:], 1))
+    low_points = get_low_points(grid, lenX, lenY)
+    print(sum([grid[p] for p in low_points]) + len(low_points))
+
+    basins = [flood(grid, p) for p in low_points]
+    basins.sort()
+    print(reduce(lambda x, y: x * y, basins[-3:]))
 
 
 def get_low_points(grid, lenX, lenY):
@@ -42,14 +40,11 @@ def flood(grid, origin):
     expanded = set()
     while not queue.empty():
         point = queue.get()
-        if point in expanded:
-            continue
         expanded.add(point)
         for n in neighbours(*point):
-            if grid[n] >= 9 or n in expanded:
-                continue
-            queue.put(n)
-    return expanded
+            if grid[n] < 9 and n not in expanded:
+                queue.put(n)
+    return len(expanded)
 
 
 def neighbours(x, y):
