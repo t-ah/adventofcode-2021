@@ -9,17 +9,12 @@ def main():
         for y in range(10):
             grid[(x,y)] = numbers[y][x]
 
-    result = 0
-    for _ in range(100):
-        result += step(grid)
+    result = sum([step(grid) for _ in range(100)])
     print(result)
 
-    step_count = 100
-    while True:
+    step_count = 101
+    while step(grid) != 100:
         step_count += 1
-        flashes = step(grid)
-        if flashes == 100:
-            break
     print(step_count)
 
 
