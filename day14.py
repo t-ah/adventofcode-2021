@@ -37,7 +37,7 @@ def evaluate(counts):
     for pair, count in counts.items():
         for letter in pair:
             letter_count[letter] += count
-    for key in letter_count:
+    for key in letter_count: # each letter is counted twice, except for odd sums (letters on both ends only count once)
         letter_count[key] = math.ceil(letter_count[key] / 2)
     result = letter_count.most_common()
     print(result[0][1] - result[-1][1])
