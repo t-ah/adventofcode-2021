@@ -40,7 +40,8 @@ def compare_scans(unfixed_scan, fixed_scans):
                     counter[diff(pos1, pos2)] += 1
             offsets, overlap = counter.most_common()[0]
             if overlap >= 12:
-                return [[pos[0] + offsets[0], pos[1] + offsets[1], pos[2] + offsets[2]] for pos in rotated_scan], offsets
+                # return [[pos[0] + offsets[0], pos[1] + offsets[1], pos[2] + offsets[2]] for pos in rotated_scan], offsets
+                return [[pos[i] + offsets[i]] for pos in rotated_scan for i in range(3)], offsets
     return None, None
 
 
