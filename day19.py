@@ -7,7 +7,7 @@ def main():
     fixed_scans = scans[:1]
     unfixed_scans = deque(scans[1:])
     positions = []
-    
+
     while unfixed_scans:
         unfixed_scan = unfixed_scans.popleft()
         fixed_scan, position = fix_scan(unfixed_scan, fixed_scans)
@@ -23,8 +23,6 @@ def main():
     max_distance = max([manhattan_distance(pos1, pos2) for pos1 in positions for pos2 in positions])
     print(max_distance)
 
-def manhattan_distance(pos1, pos2):
-    return sum([abs(pos1[i] - pos2[i]) for i in range(3)])
 
 def fix_scan(unfixed_scan, fixed_scans):
     for rotated_scan in generate_rotations(unfixed_scan):
@@ -41,6 +39,10 @@ def fix_scan(unfixed_scan, fixed_scans):
 
 def diff(pos1, pos2):
     return tuple([pos1[i] - pos2[i] for i in range(3)])
+
+
+def manhattan_distance(pos1, pos2):
+    return sum([abs(pos1[i] - pos2[i]) for i in range(3)])
 
 
 def generate_rotations(positions):
