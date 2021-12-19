@@ -6,32 +6,27 @@ def main():
     scans = read_input("day19.txt")
     fixed_scans = scans[:1]
     unfixed_scans = deque(scans[1:])
-    scanner_offsets = []
+    positions = []
     
     while unfixed_scans:
         unfixed_scan = unfixed_scans.popleft()
-        fixed_scan, offsets = compare_scans(unfixed_scan, fixed_scans)
+        fixed_scan, position = fix_scan(unfixed_scan, fixed_scans)
         if fixed_scan:
             fixed_scans.append(fixed_scan)
-            scanner_offsets.append(offsets)
+            positions.append(position)
         else:
             unfixed_scans.append(unfixed_scan)
-    beacons = set()
-    for scan in fixed_scans:
-        for pos in scan:
-            beacons.add(tuple(pos))
+
+    beacons = set([tuple(pos) for scan in fixed_scans for pos in scan])
     print(len(beacons))
-    
-    max_distance = 0
-    for i in range(len(scanner_offsets)):
-        for j in range(i + 1, len(scanner_offsets)):
-            pos1, pos2 = scanner_offsets[i], scanner_offsets[j]
-            distance = sum([abs(pos1[i] - pos2[i]) for i in range(3)])
-            max_distance = max(distance, max_distance)
+
+    max_distance = max([manhattan_distance(pos1, pos2) for pos1 in positions for pos2 in positions])
     print(max_distance)
 
+def manhattan_distance(pos1, pos2):
+    return sum([abs(pos1[i] - pos2[i]) for i in range(3)])
 
-def compare_scans(unfixed_scan, fixed_scans):
+def fix_scan(unfixed_scan, fixed_scans):
     for rotated_scan in generate_rotations(unfixed_scan):
         for fixed_scan in fixed_scans:
             counter = Counter()
@@ -40,8 +35,7 @@ def compare_scans(unfixed_scan, fixed_scans):
                     counter[diff(pos1, pos2)] += 1
             offsets, overlap = counter.most_common()[0]
             if overlap >= 12:
-                # return [[pos[0] + offsets[0], pos[1] + offsets[1], pos[2] + offsets[2]] for pos in rotated_scan], offsets
-                return [[pos[i] + offsets[i]] for pos in rotated_scan for i in range(3)], offsets
+                return [[pos[i] + offsets[i] for i in range(3)] for pos in rotated_scan], offsets
     return None, None
 
 
