@@ -14,9 +14,6 @@ class Node:
                 self.right = Node(content[1], self)
             else:
                 self.v = content
-    
-    def to_str(self):
-        return f"(v: {self.v}, l: {self.left.to_str() if self.left else None}, r: {self.right.to_str() if self.right else None})"
 
     def update_depth(self, parent_depth=-1):
         self.depth = parent_depth + 1
